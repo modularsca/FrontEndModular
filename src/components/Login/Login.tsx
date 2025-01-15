@@ -1,151 +1,69 @@
-import React, { FC } from 'react';
+import React, { useState, FC } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './Login.module.css';
+import { useNavigate } from 'react-router-dom';
+
+// const Login: FC = () => {
+//   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+//     event.preventDefault();
+//     console.log('Login submitted');
+//   };
 
 const Login: FC = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const predefinedUser = {
+    username: 'admin',
+    password: '1234',
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Login submitted');
+
+    // Validación de usuario y contraseña
+    if (username === predefinedUser.username && password === predefinedUser.password) {
+      console.log('Login exitoso');
+      navigate('/dashboard'); // Redirige al Dashboard
+    } else {
+      setError('Usuario o contraseña incorrectos');
+    }
   };
 
   return (
     <div className={`d-flex justify-content-center align-items-center vh-100 ${styles.background}`}>
-      <div className={`wp p-4 shadow ${styles.card}`} style={{ width: '25rem' }}>
-      <h3 className="text-center mb-3" style={{ fontSize: '2.5vh' }}>Login</h3>
-      <form onSubmit={handleSubmit}>
-      {/* Email input */}
-      <div data-mdb-input-init className="form-outline mb-4">
-        <input
-          type="email"
-          id="form2Example1"
-          className="form-control"
-          placeholder="Enter your email"
-        />
-        <label htmlFor="form2Example1" className="form-label">
-          Email address
-        </label>
-      </div>
-
-      {/* Password input */}
-      <div data-mdb-input-init className="form-outline mb-4">
-        <input
-          type="password"
-          id="form2Example2"
-          className="form-control"
-          placeholder="Enter your password"
-        />
-        <label htmlFor="form2Example2" className="form-label">
-          Password
-        </label>
-      </div>
-
-      {/* 2 column grid layout for inline styling */}
-      <div className="row mb-4">
-        <div className="col d-flex justify-content-center">
-          {/* Checkbox */}
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="form2Example31"
-              defaultChecked
+      <div className={`p-4 shadow ${styles.logindiv}`}>
+        <p className={`text-center mb-3 ${styles.logintext}`}>Login</p>
+        <form onSubmit={handleSubmit}>
+        <div className="d-flex flex-column align-items-center">
+          {error && <div className={`alert alert-danger w-80  ${styles.alerttext}`} role="alert">{error}</div>}
+        </div>
+          <div className="mb-3">
+            <label htmlFor="user" className={`form-label ${styles.label}`}>Email</label>
+            <input type="text" className="form-control" id="user" placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
             />
-            <label className="form-check-label" htmlFor="form2Example31">
-              Remember me
-            </label>
           </div>
-        </div>
-
-        <div className="col text-end">
-          {/* Simple link */}
-          <a href="#!">Forgot password?</a>
-        </div>
+          <div className="mb-3">
+            <label htmlFor="password" className={`form-label ${styles.label}`}>Password</label>
+            <input type="password" className="form-control" id="password"
+             placeholder="Enter your password" 
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+             required
+            />
+          </div>
+          {/* {error && <div className="text-danger mb-3">{error}</div>} */}
+          <div className="d-flex flex-column align-items-center">
+            <button type="submit" className="btn btn-primary w-80 mt-3">Login</button>
+          </div>
+        </form>
       </div>
-
-      {/* Submit button */}
-      <button
-        type="button"
-        data-mdb-button-init
-        data-mdb-ripple-init
-        className="btn btn-primary btn-block mb-4"
-      >
-        Sign in
-      </button>
-
-      {/* Register buttons */}
-      <div className="text-center">
-        <p>
-          Not a member? <a href="#!">Register</a>
-        </p>
-        <p>or sign up with:</p>
-        <div>
-          <button
-            type="button"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            className="btn btn-link btn-floating mx-1"
-          >
-            <i className="fab fa-facebook-f"></i>
-          </button>
-          <button
-            type="button"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            className="btn btn-link btn-floating mx-1"
-          >
-            <i className="fab fa-google"></i>
-          </button>
-          <button
-            type="button"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            className="btn btn-link btn-floating mx-1"
-          >
-            <i className="fab fa-twitter"></i>
-          </button>
-          <button
-            type="button"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            className="btn btn-link btn-floating mx-1"
-          >
-            <i className="fab fa-github"></i>
-          </button>
-        </div>
-      </div>
-    </form>
     </div>
-    </div>
-
-    // <div className={`d-flex justify-content-center align-items-center vh-100 ${styles.background}`}>
-    //   <div className="wp p-4 shadow" style={{ width: '25rem' }}>
-    //     <h3 className="text-center mb-3" style={{ fontSize: '2.5vh' }}>Login</h3>
-    //     <form onSubmit={handleSubmit}>
-    //       <div className="mb-3">
-    //         <label htmlFor="email" className={`form-label ${styles.label}`}>Email</label>
-    //         <input 
-    //           type="email" 
-    //           className="form-control" 
-    //           id="email" 
-    //           placeholder="Enter your email"
-    //           required 
-    //         />
-    //       </div>
-    //       <div className="mb-3">
-    //         <label htmlFor="password" className={`form-label ${styles.label}`}>Password</label>
-    //         <input 
-    //           type="password" 
-    //           className="form-control" 
-    //           id="password" 
-    //           placeholder="Enter your password"
-    //           required 
-    //         />
-    //       </div>
-    //       <button type="submit" className="btn btn-primary w-100">Login</button>
-    //     </form>
-    //   </div>
-    // </div>
   );
 };
 

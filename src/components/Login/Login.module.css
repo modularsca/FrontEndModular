@@ -7,7 +7,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(-45deg, #262626, #333, #454545);
+    /* background: linear-gradient(-45deg, #000, #666, #454545); */
+    background: linear-gradient(-45deg, #222, #333, #444);
     background-size: 300% 300%;
     animation: wave 6s ease infinite;
   }
@@ -39,6 +40,27 @@
     color: #fcedec;
   } */
 
+   /* LOGIN */
+
+   .logindiv{
+    width: 25rem;
+   }
+
+  .alerttext{
+    color: #f7e9e9cc;
+    font-weight: 500;
+    background-color: #500;
+    border: 1px solid rgba(255, 0, 0, 0.215);
+    padding: 10px;
+    text-align: center;
+  }
+
+  .logintext{
+    font-size: 3vh;
+    color: white;
+  }
+
   .label{
     font-size: 1.8vh;
+    color: white;
   }
