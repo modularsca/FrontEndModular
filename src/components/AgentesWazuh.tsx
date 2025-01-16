@@ -8,6 +8,11 @@ const GET_AGENTES_WAZUH = `
             name
             ip
             status
+            passedPolicies
+            failedPolicies
+            naPolicies
+            lastScan
+            policyName
         }
     }
 `;
@@ -16,9 +21,19 @@ const AgentesWazuh = () => {
     const { data, isLoading, error } = useQuery({
         queryKey: ['agentesWazuh'], // El nombre único de la consulta
         queryFn: async () => {
-            return graphqlClient.request<{ agentesWazuh: { id: string; name: string; ip: string; status: string }[] }>(
-                GET_AGENTES_WAZUH
-            );
+            return graphqlClient.request<{
+                agentesWazuh: {
+                    id: string;
+                    name: string;
+                    ip: string;
+                    status: string;
+                    passedPolicies: number;
+                    failedPolicies: number;
+                    naPolicies: number;
+                    lastScan: string | null;
+                    policyName: string | null;
+                }[];
+            }>(GET_AGENTES_WAZUH);
         },
     });
 
@@ -34,6 +49,11 @@ const AgentesWazuh = () => {
                         <strong>Nombre:</strong> {agente.name} <br />
                         <strong>IP:</strong> {agente.ip} <br />
                         <strong>Estado:</strong> {agente.status} <br />
+                        <strong>Políticas Pasadas:</strong> {agente.passedPolicies} <br />
+                        <strong>Políticas Fallidas:</strong> {agente.failedPolicies} <br />
+                        <strong>Políticas N/A:</strong> {agente.naPolicies} <br />
+                        <strong>Último Escaneo:</strong> {agente.lastScan || 'No disponible'} <br />
+                        <strong>Nombre de la Política:</strong> {agente.policyName || 'No disponible'} <br />
                         <hr />
                     </li>
                 ))}
@@ -43,4 +63,3 @@ const AgentesWazuh = () => {
 };
 
 export default AgentesWazuh;
-
