@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import graphqlClient from '../graphClient';
 import { TableExample } from './TablaAgentes';
 import { DonutChartHero } from './DonutChartTodosA';
-import { DonutChartSolo } from './DonutChartAgente';
+import { DonutChartAgente } from './DonutChartAgente';
 
 const GET_AGENTES_WAZUH = `
     query GetAgentesWazuh {
@@ -72,7 +72,7 @@ const AgentesWazuh = () => {
                         { name: 'Politicas N/A', amount: agente.naPolicies },
                     ];
                     return (
-                        <DonutChartSolo key={agente.id} data={donutChartDataSolo} agentName={agente.name} />
+                        <DonutChartAgente key={agente.id} data={donutChartDataSolo} agentName={agente.name} />
                     );
                 })}
             </div>
