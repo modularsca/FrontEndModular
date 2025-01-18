@@ -1,5 +1,8 @@
 // import React from 'react';
 import { DonutChart, Card, Title } from '@tremor/react';
+import { DonutChartAgente } from '../DonutChartAgente';
+import AgentesWazuh from '../AgentesWazuh';
+
 
 const Dashboard = () => {
   const data = [
@@ -9,15 +12,10 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-container vh-100">
+    <div className="dashboard-container vh-full bg-white p-3">
       <Title>Dashboard</Title>
       <Card>
-        <DonutChart
-          data={data}
-          category="value"
-          index="name" // Cambiado de dataKey a index
-          colors={['blue', 'green', 'red']}
-        />
+        <AgentesWazuh/>
       </Card>
     </div>
   );

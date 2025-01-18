@@ -27,12 +27,14 @@ const App: React.FC = () => {
   return (
     <Router>
       {isAuthenticated ? (
+        <div className=' h-full shadow-slate-500 w-full min-w-min' >
         <Layout onLogout={handleLogout}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </Layout>
+        </div>
       ) : (
         <Routes>
           <Route path="/" element={<Login onLogin={handleLogin} error={error} />} />

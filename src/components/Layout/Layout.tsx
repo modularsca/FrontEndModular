@@ -13,9 +13,9 @@ const click = () => {
 
 const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
   return (
-    <div className={styles.layout}>
+    <div className={` ${styles.layout}`}>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <nav className="w-full navbar navbar-expand-lg navbar-dark bg-dark px-4">
         {/* Izquierda: Palabra */}
         <a className={`navbar-brand ${styles.brand}`} href="/">Google</a>
 
@@ -42,21 +42,22 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
       </nav>
 
       {/* Main Layout */}
-      <div className="d-flex">
-        {/* Sidebar */}
-        <div className={`${styles.sidebar}`}>
-            <p className={`col-9 ${styles.side_title}`}>Sidebar</p>
-            <div className="nav flex-column">
-                <p className={`col-10 ${styles.side_options}`}>Overview</p>
-                <p className={`col-10 ${styles.side_options}`}>Work Orders</p>
-                <p className={`col-10 ${styles.side_options}`}>Assets</p>
-                <p className={`col-10 ${styles.side_options}`}>Search</p>
-            </div>
+      <div className='d-flex'>
+        <div className=" min-w-4">
+          {/* Sidebar */}
+          <div className={`${styles.sidebar}`}>
+              <p className={`"col-9 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold " `}>Sidebar</p>
+              <div className="nav flex-column ">
+                  <p className="col-9 text-lg sm:text-xl md:text-2xl lg:text-xl mt-2">Overview</p>
+                  <p className="col-9 text-lg sm:text-xl md:text-2xl lg:text-xl mt-2">Work Orders</p>
+                  <p className="col-9 text-lg sm:text-xl md:text-2xl lg:text-xl mt-2">Assets</p>
+                  <p className="col-9 text-lg sm:text-xl md:text-2xl lg:text-xl mt-2">Search</p>
+              </div>
+          </div>
         </div>
 
-
         {/* Main Content */}
-        <div className={`flex-grow-1 shadow ${styles.content}`}>
+        <div className={`overflow-auto w-full h-full shadow ${styles.content}`}>
           {children}
         </div>
       </div>
