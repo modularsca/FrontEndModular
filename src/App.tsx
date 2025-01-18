@@ -1,40 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Agentes from './components/Agentes'
-import AgentesWazuh from './components/AgentesWazuh'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout/Layout';
+import Login from './components/Login/Login';
+import Dashboard from './components/Dashboard/Dashboard';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = (username: string, password: string) => {
+    const defaultUsername = 'admin';
+    const defaultPassword = '123';
+
+    if (username === defaultUsername && password === defaultPassword) {
+      setIsAuthenticated(true);
+      setError(null);
+    } else {
+      setError('Credenciales inválidas. Por favor, inténtelo de nuevo.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <Agentes/>
-      <h1>AGENTES WAZUH</h1>
-      <AgentesWazuh/>
-    </>
-  )
-}
+    <Router>
+      {isAuthenticated ? (
+        <Layout onLogout={handleLogout}>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Layout>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Login onLogin={handleLogin} error={error} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      )}
+    </Router>
+  );
+};
 
-export default App
+export default App;
