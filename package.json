@@ -11,23 +11,35 @@
   },
   "dependencies": {
     "@apollo/client": "^3.12.4",
+    "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-label": "^2.1.1",
+    "@remixicon/react": "^4.6.0",
     "@tanstack/react-query": "^5.62.15",
     "@tanstack/react-query-devtools": "^5.62.15",
+    "@tremor/react": "^3.18.7",
     "bootstrap": "^5.3.3",
+    "clsx": "^2.1.1",
     "graphql": "^16.10.0",
     "graphql-request": "^7.1.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "recharts": "^2.15.0",
+    "tailwind-merge": "^2.6.0",
+    "tailwind-variants": "^0.3.0"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }
