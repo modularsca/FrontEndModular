@@ -1,31 +1,46 @@
-//import { useState } from 'react'
-import './App.css'
-import Agentes from './components/Agentes'
-import AgentesWazuh from './components/AgentesWazuh'
-import {TableExample} from './components/TablaAgentes'
-import {DonutChartHero} from './components/DonutChartTodosA'
-//import { Label } from './components/Label';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout/Layout';
+import Login from './components/Login/Login';
+import Dashboard from './components/Dashboard/Dashboard';
 
-function App() {
-  //const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = (username: string, password: string) => {
+    const defaultUsername = 'admin';
+    const defaultPassword = '123';
+
+    if (username === defaultUsername && password === defaultPassword) {
+      setIsAuthenticated(true);
+      setError(null);
+    } else {
+      setError('Credenciales inválidas. Por favor, inténtelo de nuevo.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
 
   return (
-    <>
+    <Router>
+      {isAuthenticated ? (
+        <Layout onLogout={handleLogout}>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Layout>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Login onLogin={handleLogin} error={error} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      )}
+    </Router>
+  );
+};
 
-      <div className="flex justify-center mt-5 text-violet-400 text-5xl">
-        <h1>Agentes</h1>
-      </div>
-
-      <div className='flex justify-center mt-5 items-top'>
-      {/* <TableExample/> */}
-      </div>
-
-
-      {/* <Agentes/> */}
-      <AgentesWazuh/>
-
-    </>
-  )
-}
-
-export default App
+export default App;

@@ -1,0 +1,67 @@
+  /* .background{
+    background-color: #333;
+  } */
+  .background {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background: linear-gradient(-45deg, #000, #666, #454545); */
+    background: linear-gradient(-45deg, #222, #333, #444);
+    background-size: 300% 300%;
+    animation: wave 6s ease infinite;
+  }
+  
+  @keyframes wave {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .card {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.751);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+
+  /* card form */
+
+  /* .card{
+    background-color: #222;
+    color: #fcedec;
+  } */
+
+   /* LOGIN */
+
+   .logindiv{
+    width: 25rem;
+   }
+
+  .alerttext{
+    color: #f7e9e9cc;
+    font-weight: 500;
+    background-color: #500;
+    border: 1px solid rgba(255, 0, 0, 0.215);
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5vh;
+  }
+
+  .logintext{
+    font-size: 3vh;
+    color: white;
+  }
+
+  .label{
+    font-size: 1.8vh;
+    color: white;
+  }
