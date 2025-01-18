@@ -4,9 +4,14 @@ import styles from './Layout.module.css';
 
 interface LayoutProps {
   children: ReactNode; // El contenido que se renderizará dentro del layout
+  onLogout: () => void;
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const click = () => {
+  alert("boton");
+};
+
+const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
   return (
     <div className={styles.layout}>
       {/* Navbar */}
@@ -18,19 +23,19 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <div className="navbar-collapse justify-content-end p-2">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className={`nav-link ${styles.nav_link}`} href="/">Home</a>
+              <a className={`nav-link ${styles.nav_link}`} onClick={click}>Home</a>
             </li>
             <li className="nav-item">
-              <a className={`nav-link ${styles.nav_link}`} href="/about">About</a>
+              <a className={`nav-link ${styles.nav_link}`} onClick={click}>About</a>
             </li>
             <li className="nav-item">
-              <a className={`nav-link ${styles.nav_link}`} href="/services">Services</a>
+              <a className={`nav-link ${styles.nav_link}`} onClick={click}>Services</a>
             </li>
             <li className="nav-item">
-              <a className={`nav-link ${styles.nav_link}`} href="/contact">Contact</a>
+              <a className={`nav-link ${styles.nav_link}`} onClick={click}>Contact</a>
             </li>
             <li className="nav-item">
-              <a className={`nav-link ${styles.nav_link}`} href="/login">Login</a>
+              <a className={`nav-link ${styles.nav_link}`} onClick={onLogout}>Logout</a>
             </li>
           </ul>
         </div>
