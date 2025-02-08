@@ -20,7 +20,7 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
     <div className={` ${styles.layout}`}>
       
        <nav className="w-full navbar navbar-expand-lg navbar-dark bg-dark px-4">
-        <a className={`navbar-brand ${styles.brand}`} href="/">Google</a>
+        <a className={`navbar-brand ${styles.brand}`} href="/">Proyecto M</a>
         <div className="navbar-collapse justify-content-end p-2">
           <ul className="navbar-nav">
             <li className="nav-item w-25">
@@ -45,22 +45,22 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
       <div className="d-flex h-full">
         {/* <div className="flex-shrink-0 bg-dark text-white h-screen" style={{ width: '250px' }}> */}
         <div className={`flex-shrink-0 bg-dark text-white h-screen col-lg-4 col-sm-2 ${styles.sidebar}`} style={{ width: '250px' }}>
-          <p className="fs-2 p-3">Options</p>
+          {/* <p className="fs-2">Administración</p> */}
           <div className="nav flex-column">
             <Link to="/dashboard" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
-              Overview
+              Dashboard
             </Link>
             <Link to="/agents" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
-              Agents
+              Actividad
             </Link>
             <Link to="/management" className={`w-75 nav-link text-white px-3 py-2 ${styles.side_options}`}>
-              Management
+              Estadisticas
             </Link>
             <Link to="/tools" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
-              Tools
+              Analisis
             </Link>
-            <Link to="/settings" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
-              Settings
+            <Link to="/settings" className={`w-75 nav-link text-white px-3 py-2 ${styles.side_options}`}>
+              Configuración
             </Link>
           </div>
 

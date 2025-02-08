@@ -43,8 +43,8 @@ const AgentesDonuts = () => {
         },
     });
 
-    // if (isLoading) return <p>Loading...</p>;
-    // if (error) return <p>Error: {error instanceof Error ? error.message : 'Unknown error'}</p>;
+     if (isLoading) return <p>Loading...</p>;
+     if (error) return <p>Error: {error instanceof Error ? error.message : 'Unknown error'}</p>;
 
     const agentesData = data?.agentesWazuhTest.map(agente => ({
         id: agente.id,
@@ -59,7 +59,7 @@ const AgentesDonuts = () => {
     
     return (
         <div>
-            <TableExample data={agentesData || []} />
+            {/* <TableExample data={agentesData || []} /> */}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center ">
                 {data?.agentesWazuhTest.map(agente => {
