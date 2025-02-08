@@ -14,28 +14,25 @@
   .content {
     background-color: #55555594; /* Fondo claro para el contenido */
     flex-grow: 1;
-    border-radius: 10px;
-    /* height: auto;
-    margin-bottom: 200px; */
     /* border: 2px solid #f00; */
   }
   
   /* sidebar */
 
   .sidebar {
+    /* width: 220px; */
+    height: auto; /* Asegura que la sidebar cubra toda la pantalla */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.452);
     background-color: #333;
     color: #f8f9fa;
     text-align: left;
     padding-top: 20px;
     padding-left: 20px;
-    overflow-y: auto; 
-    scrollbar-width: thin; 
-    scrollbar-color: #6c757d;
+    /* scrollbar */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    scrollbar-width: thin; /* Ancho del scrollbar (solo en navegadores compatibles) */
+    scrollbar-color: #6c757d #e9ecef; /* Colores del scrollbar */
     z-index: 100;
-
-    /* width: 220px;
-    height: auto; */
   }
 
   .sidebar::-webkit-scrollbar {
@@ -56,7 +53,6 @@
     border-radius: 8px;
     transition: all ease 1s;
     margin-left: 10px;
-    text-align: start;
   }
 
   .nav_link:hover {
@@ -87,14 +83,14 @@
     font-size: 2vh;
     text-align: start;
     color: white;
-    padding: 5px 0px 5px 20px;
+    padding: 5px 0px 5px 15px;
     margin-top: 10px;
     border-radius: 8px;
     transition: all ease .7s;
   }
 
   .side_options:hover {
-    background-color: rgba(255, 255, 255, 0.651);
+    background-color: #7f4ca5;
     transition: .7s;
     cursor: pointer;
   }
