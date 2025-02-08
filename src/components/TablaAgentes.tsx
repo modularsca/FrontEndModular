@@ -1,4 +1,5 @@
 import { Badge } from "../components/Badge"
+import { useNavigate } from "react-router-dom"; 
 import {
   Table,
   TableBody,
@@ -22,7 +23,8 @@ interface TableExampleProps {
     }>;
   }
 
-export function TableExample( {data}:TableExampleProps) {
+export function TableExample({ data }: TableExampleProps) {
+  const navigate = useNavigate();
 
   return (
     <>
@@ -51,7 +53,8 @@ export function TableExample( {data}:TableExampleProps) {
           </TableHead>
           <TableBody>
             {data.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow key={item.id} onClick={() => navigate(`/details/${item.id}`)} // Redirige al hacer clic
+              className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                 <TableCell >{item.id}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>

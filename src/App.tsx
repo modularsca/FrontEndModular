@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
+import Details from './components/Dashboard/Details';
+import DashboardAgentes from './components/Dashboard/DashboardAgentes';
 import Management from './components/Management/Management';
 import Tools from './components/Tools/Tools';
 import Agents from './components/Agents/Agents';
@@ -40,6 +42,8 @@ const App: React.FC = () => {
             <Route path="/tools" element={<Tools />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/DashboardAgentes" element={<DashboardAgentes />} />
+            <Route path="/details/:id" element={<Details />} />
           </Routes>
         </Layout>
         </div>

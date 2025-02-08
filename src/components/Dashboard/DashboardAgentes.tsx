@@ -2,11 +2,10 @@
 import { DonutChart, Card, Title } from '@tremor/react';
 import { DonutChartAgente } from '../DonutChartAgente';
 import AgentesDonuts from '../AgentesDonuts';
-import { useState } from "react";
+import TableAgentes from '../TableAgentes';
 
 
-const Dashboard = () => {
-      const [filter, setFilter] = useState("");
+const DashboardAgentes = () => {
   const data = [
     { name: 'Category A', value: 55 },
     { name: 'Category B', value: 25 },
@@ -15,19 +14,12 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container vh-full bg-white p-3">
-      <Title className=' text-3xl m-2'>Dashboard</Title>
-        <input
-          type="text"
-          placeholder="Filtrar agentes..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="p-2 border rounded mb-4 w-full"
-        />
+      <Title>Dashboard 2</Title>
       <Card>
-        <AgentesDonuts/>
+        <TableAgentes/>
       </Card>
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardAgentes;
