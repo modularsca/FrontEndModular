@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
+import Management from './components/Management/Management';
+import Tools from './components/Tools/Tools';
+import Agents from './components/Agents/Agents';
+import Settings from './components/Settings/Settings';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,8 +33,12 @@ const App: React.FC = () => {
       {isAuthenticated ? (
         <div className=' h-full shadow-slate-500 w-full min-w-min' >
         <Layout onLogout={handleLogout}>
-          <Routes>
+        <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/agents" element={<Agents />} />
+            <Route path="/management" element={<Management />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </Layout>
