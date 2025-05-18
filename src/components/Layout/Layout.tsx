@@ -199,10 +199,16 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
               </a>
             </li>
             <li className="nav-item w-25">
-              <a className={`nav-link p-2 w-50 ${styles.nav_link}`} onClick={onLogout}>Logout</a>
+              <a
+                className={`nav-link p-2 w-50 ${styles.nav_link}`}
+                onClick={onLogout}
+              >
+                Logout
+              </a>
             </li>
           </ul>
         </div>
+      </nav>
       </nav>
 
       <div className="d-flex h-full">
@@ -211,16 +217,28 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
             <Link to="/dashboard" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
               Dashboard
             </Link>
-            <Link to="/agents" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
+            <Link
+              to="/agents"
+              className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}
+            >
               Actividad
             </Link>
-            <Link to="/management" className={`w-75 nav-link text-white px-3 py-2 ${styles.side_options}`}>
+            <Link
+              to="/management"
+              className={`w-75 nav-link text-white px-3 py-2 ${styles.side_options}`}
+            >
               Estadisticas
             </Link>
-            <Link to="/tools" className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}>
+            <Link
+              to="/tools"
+              className={`w-50 nav-link text-white px-3 py-2 ${styles.side_options}`}
+            >
               Analisis
             </Link>
-            <Link to="/settings" className={`w-75 nav-link text-white px-3 py-2 ${styles.side_options}`}>
+            <Link
+              to="/settings"
+              className={`w-75 nav-link text-white px-3 py-2 ${styles.side_options}`}
+            >
               Configuración
             </Link>
           </div>

@@ -1,109 +1,108 @@
-  .layout {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    background-color: #333;
-    /* border: 2px solid #f00; */
-  }
+.layout {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #333;
+  /* border: 2px solid #f00; */
+}
 
-  .brand {
-    font-size: 3vh;
-    padding: 5px;
-  }
+.brand {
+  font-size: 3vh;
+  padding: 5px;
+}
 
-  .content {
-    background-color: #55555594; /* Fondo claro para el contenido */
-    flex-grow: 1;
-    border-radius: 10px;
-    /* height: auto;
+.content {
+  background-color: #55555594; /* Fondo claro para el contenido */
+  flex-grow: 1;
+  border-radius: 10px;
+  /* height: auto;
     margin-bottom: 200px; */
-    /* border: 2px solid #f00; */
-  }
-  
-  /* sidebar */
+  /* border: 2px solid #f00; */
+}
 
-  .sidebar {
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.452);
-    background-color: #333;
-    color: #f8f9fa;
-    text-align: left;
-    padding-top: 20px;
-    padding-left: 20px;
-    overflow-y: auto; 
-    scrollbar-width: thin; 
-    scrollbar-color: #6c757d;
-    z-index: 100;
+/* sidebar */
 
-    /* width: 220px;
+.sidebar {
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.452);
+  background-color: #333;
+  color: #f8f9fa;
+  text-align: left;
+  padding-top: 20px;
+  padding-left: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #6c757d;
+  z-index: 100;
+  top: 50px;
+  /* width: 220px;
     height: auto; */
-  }
+}
 
-  .sidebar::-webkit-scrollbar {
-    width: 8px; /* Ancho del scrollbar en navegadores Webkit */
-  }
-  
-  .sidebar::-webkit-scrollbar-thumb {
-    background-color: #6c757d; /* Color del scroll */
-    border-radius: 4px; /* Esquinas redondeadas */
-  }
-  
-  .sidebar::-webkit-scrollbar-track {
-    background-color: #e9ecef; /* Fondo del track del scrollbar */
-  }
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Ancho del scrollbar en navegadores Webkit */
+}
 
-  /* NAVBAR */
-  .nav_link {
-    border-radius: 8px;
-    transition: all ease 1s;
-    margin-left: 10px;
-    text-align: start;
-  }
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #6c757d; /* Color del scroll */
+  border-radius: 4px; /* Esquinas redondeadas */
+}
 
-  .nav_link:hover {
-    background-color: rgba(255, 255, 255, 0.651);
-    transition: 1s;
-    cursor: pointer;
-  }
+.sidebar::-webkit-scrollbar-track {
+  background-color: #e9ecef; /* Fondo del track del scrollbar */
+}
 
-  /* SIDEBAR */
+/* NAVBAR */
+.nav_link {
+  border-radius: 8px;
+  transition: all ease 1s;
+  margin-left: 10px;
+  text-align: start;
+}
 
-  .side_title {
-    font-size: 3vh;
-    text-align: start;
-    color: white;
-    /* background-color: #000; */
-    font-weight: bold;
-    padding-left: 10px;
-  }
+.nav_link:hover {
+  background-color: rgba(255, 255, 255, 0.651);
+  transition: 1s;
+  cursor: pointer;
+}
 
-  .side_subtitle {
-    font-size: 2vh;
-    text-align: start;
-    color: white;
-    padding-left: 20px;
-  }
+/* SIDEBAR */
 
-  .side_options {
-    font-size: 2vh;
-    text-align: start;
-    color: white;
-    padding: 5px 0px 5px 20px;
-    margin-top: 10px;
-    border-radius: 8px;
-    transition: all ease .7s;
-  }
+.side_title {
+  font-size: 3vh;
+  text-align: start;
+  color: white;
+  /* background-color: #000; */
+  font-weight: bold;
+  padding-left: 10px;
+}
 
-  .side_options:hover {
-    background-color: rgba(255, 255, 255, 0.651);
-    transition: .7s;
-    cursor: pointer;
-  }
+.side_subtitle {
+  font-size: 2vh;
+  text-align: start;
+  color: white;
+  padding-left: 20px;
+}
 
-  /* FOOTER */
+.side_options {
+  font-size: 2vh;
+  text-align: start;
+  color: white;
+  padding: 5px 0px 5px 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+  transition: all ease 0.7s;
+}
 
-  footer {
-    background-color: #343a40; /* Fondo oscuro para el pie de página */
-    color: white;
-    padding: 10px;
-  }
-  
+.side_options:hover {
+  background-color: rgba(255, 255, 255, 0.651);
+  transition: 0.7s;
+  cursor: pointer;
+}
+
+/* FOOTER */
+
+footer {
+  background-color: #343a40; /* Fondo oscuro para el pie de página */
+  color: white;
+  padding: 10px;
+}
