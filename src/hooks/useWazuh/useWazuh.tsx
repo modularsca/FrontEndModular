@@ -48,7 +48,6 @@ export const useWazuh = () => {
   const getAgentesQuery = useQuery({
     queryKey: ["agentesWazuh"],
     queryFn: getAgentes,
-    refetchInterval: 10000,
     staleTime: 1000 * 60 * 60,
   });
 
