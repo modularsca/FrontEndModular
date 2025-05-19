@@ -2,8 +2,9 @@
 
 import React from "react"
 import * as LabelPrimitives from "@radix-ui/react-label"
+import { cx } from "../../lib/utils"
 
-import { cx } from "../lib/utils"
+
 
 interface LabelProps
   extends React.ComponentPropsWithoutRef<typeof LabelPrimitives.Root> {
@@ -16,7 +17,7 @@ const Label = React.forwardRef<
 >(({ className, disabled, ...props }, forwardedRef) => (
   <LabelPrimitives.Root
     ref={forwardedRef}
-    className={cx(
+    className={cx
       // base
       "text-sm leading-none",
       // text color

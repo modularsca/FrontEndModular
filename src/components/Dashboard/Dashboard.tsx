@@ -1,30 +1,23 @@
 // import React from 'react';
-import { DonutChart, Card, Title } from '@tremor/react';
-import { DonutChartAgente } from '../DonutChartAgente';
-import AgentesDonuts from '../AgentesDonuts';
+import { Card, Title } from "@tremor/react";
+import AgentesDonuts from "../Views/AgentesDonuts/AgentesDonuts";
 import { useState } from "react";
 
-
 const Dashboard = () => {
-      const [filter, setFilter] = useState("");
-  const data = [
-    { name: 'Category A', value: 55 },
-    { name: 'Category B', value: 25 },
-    { name: 'Category C', value: 20 },
-  ];
+  const [filter, setFilter] = useState("");
 
   return (
     <div className="dashboard-container vh-full bg-white p-3">
-      <Title className=' text-3xl m-2'>Dashboard</Title>
-        <input
-          type="text"
-          placeholder="Filtrar agentes..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="p-2 border rounded mb-4 w-full"
-        />
+      <Title className=" text-3xl m-2">Dashboard</Title>
+      <input
+        type="text"
+        placeholder="Filtrar agentes..."
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        className="p-2 border rounded mb-4 w-full"
+      />
       <Card>
-        <AgentesDonuts/>
+        <AgentesDonuts />
       </Card>
     </div>
   );
