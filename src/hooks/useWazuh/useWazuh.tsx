@@ -23,10 +23,7 @@ const getAgentes = async () => {
   return data.agentesWazuhTest;
 };
 
-const getChecksFallados = async (
-  paramAgenteId: string,
-  paramPolicyId: string
-) => {
+const getChecksFallados = async (paramAgenteId: string, paramPolicyId: string) => {
   // Cambié nombres de params para claridad
   try {
     const data = await graphqlClient.request<{
@@ -38,18 +35,12 @@ const getChecksFallados = async (
     });
     return data.failedCheckIdsTest;
   } catch (error) {
-    console.error(
-      `Error fetching failed checks for agent ${paramAgenteId} and policy ${paramPolicyId}:`,
-      error
-    );
+    console.error(`Error fetching failed checks for agent ${paramAgenteId} and policy ${paramPolicyId}:`, error);
     return undefined;
   }
 };
 
-const getCveProbabilities = async (
-  paramAgentId: string,
-  paramPolicyId: string
-) => {
+const getCveProbabilities = async (paramAgentId: string, paramPolicyId: string) => {
   try {
     const data = await graphqlClient.request<{
       cveProbabilitiesForPolicyTest: {
@@ -62,10 +53,7 @@ const getCveProbabilities = async (
     });
     return data.cveProbabilitiesForPolicyTest;
   } catch (error) {
-    console.error(
-      `Error fetching CVE probabilities for agent ${paramAgentId} and policy ${paramPolicyId}:`,
-      error
-    );
+    console.error(`Error fetching CVE probabilities for agent ${paramAgentId} and policy ${paramPolicyId}:`, error);
     return undefined;
   }
 };
@@ -100,6 +88,8 @@ const GET_CVE_PROBS_QUERY = gql`
     cveProbabilitiesForPolicyTest(agentId: $agentId, policyId: $policyId) {
       cveId
       probability
+      description
+      possibleRisks
     }
   }
 `;
@@ -122,10 +112,7 @@ export const useWazuh = (agentIdParam?: string, policyIdParam?: string) => {
     enabled: !!agentIdParam && !!policyIdParam,
   });
 
-  const getCveProbsQuery = useQuery<
-    { cveId: string; probability: number }[] | undefined,
-    Error
-  >({
+  const getCveProbsQuery = useQuery<{ cveId: string; probability: number }[] | undefined, Error>({
     queryKey: ["cveProbs", agentIdParam, policyIdParam],
     queryFn: () => {
       if (!agentIdParam || !policyIdParam) return Promise.resolve(undefined);
