@@ -172,17 +172,14 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
             >
               Actividad
             </Link>
+            <Link to="/agentAnalysis" className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}>
+              Análisis
+            </Link>
             <Link
               to="/management"
               className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
             >
               Estadisticas
-            </Link>
-            <Link
-              to="/tools"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
-            >
-              Analisis
             </Link>
             <Link
               to="/settings"
