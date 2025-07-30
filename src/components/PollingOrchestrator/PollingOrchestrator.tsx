@@ -153,6 +153,9 @@ const PollingOrchestrator: React.FC = () => {
 
   // 5. EFECTO QUE REACCIONA A LOS DATOS DE CHECKS FALLADOS
   useEffect(() => {
+    if (isInitialMount.current) {
+      return;
+    }
     if (getChecksFalladosQuery.isFetched && currentProcessingAgentId) {
       if (getChecksFalladosQuery.isSuccess && getChecksFalladosQuery.data) {
         updateAgentFailedChecks(
