@@ -13,6 +13,8 @@ import Management from "./components/Management/Management";
 import Tools from "./components/Tools/Tools";
 import Agents from "./components/Agents/Agents";
 import Settings from "./components/Settings/Settings";
+import AgentAnalysis from "./components/AgentAnalysis/AgentAnalysis";
+import AgentDetail from "./components/AgentAnalysis/AgentDetail";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,13 +42,16 @@ const App: React.FC = () => {
         <div className=" h-full shadow-slate-500 w-full min-w-min">
           <Layout onLogout={handleLogout}>
             <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/agents" element={<Agents />} />
-              <Route path="/management" element={<Management />} />
-              <Route path="/tools" element={<Tools />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="agents" element={<Agents />} />
+              <Route path="management" element={<Management />} />
+              <Route path="tools" element={<Tools />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="details/:id" element={<Details />} />
+              <Route path="agentAnalysis" element={<AgentAnalysis />} />
+              <Route path="agentAnalysis/:id" element={<AgentDetail />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/details/:id" element={<Details />} />
             </Routes>
           </Layout>
         </div>
