@@ -112,6 +112,7 @@ const AgentAnalysis: React.FC = () => {
             {agente.topCVEs.map((cve) => (
               <li key={cve.cveId}>
                 <strong>{cve.cveId}</strong> – {cve.probability}%
+                <p className="text-xs text-gray-500 pl-4">{cve.description}</p>
               </li>
             ))}
           </ul>

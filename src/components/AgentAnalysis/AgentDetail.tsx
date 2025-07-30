@@ -106,7 +106,15 @@ const AgentDetail: React.FC = () => {
             key={cve.cveId}
             className="bg-white rounded-xl shadow p-4 border border-gray-200"
           >
-            <h3 className="font-semibold text-sm text-gray-800">
+            <h3
+              className={`font-semibold text-sm ${
+                cve.probability < 50
+                  ? "text-green-600"
+                  : cve.probability < 75
+                  ? "text-orange-500"
+                  : "text-red-600"
+              }`}
+            >
               {cve.cveId} – {cve.probability}%
             </h3>
             <p className="text-sm text-gray-600 mt-1">
