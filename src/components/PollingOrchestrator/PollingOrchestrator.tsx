@@ -177,6 +177,9 @@ const PollingOrchestrator: React.FC = () => {
 
   // 6. EFECTO QUE REACCIONA A LOS DATOS DE CVEs (AHORA COMPLETO)
   useEffect(() => {
+    if (isInitialMount.current) {
+      return;
+    }
     if (
       getCveProbsQuery.isSuccess &&
       getCveProbsQuery.data &&
