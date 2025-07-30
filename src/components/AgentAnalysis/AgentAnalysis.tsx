@@ -56,11 +56,11 @@ const AgentAnalysis: React.FC = () => {
   const { getAgentesQuery } = useWazuh();
   const [cveDataList, setCveDataList] = useState<CveAgentData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { isSuccess, data: agentes } = getAgentesQuery;
 
   useEffect(() => {
     const fetchCvesPorAgente = async () => {
-      if (getAgentesQuery.isSuccess && getAgentesQuery.data) {
-        const agentes = getAgentesQuery.data;
+      if (isSuccess && agentes) {
         const resultados: CveAgentData[] = [];
 
         for (const agente of agentes) {
@@ -90,7 +90,7 @@ const AgentAnalysis: React.FC = () => {
     };
 
     fetchCvesPorAgente();
-  }, [getAgentesQuery]);
+  }, [isSuccess, agentes]);
 
   if (loading) return <div>Cargando análisis de agentes...</div>;
 
@@ -112,6 +112,7 @@ const AgentAnalysis: React.FC = () => {
             {agente.topCVEs.map((cve) => (
               <li key={cve.cveId}>
                 <strong>{cve.cveId}</strong> – {cve.probability}%
+                <p className="text-xs text-gray-500 pl-4">{cve.description}</p>
               </li>
             ))}
           </ul>

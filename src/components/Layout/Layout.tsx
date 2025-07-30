@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react"; // Eliminado useState ya que no habrá estado local de notificaciones
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./Layout.module.css"; //
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 // Importa el hook y el tipo de mensaje del NotificacionContext
@@ -21,6 +21,7 @@ interface LayoutProps {
 // Ya no necesitamos la interfaz local Notification
 
 const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
+  const location = useLocation();
   // Consumimos las notificaciones y la función para removerlas del NotificacionContext
   const { notifications, removeNotification } = useNotification();
 
@@ -162,28 +163,31 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
           <div className="nav flex-column">
             <Link
               to="/dashboard"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`} // w-auto o specific width
+              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options} ${location.pathname === '/dashboard' ? styles.active : ''}`}
             >
               Dashboard
             </Link>
             <Link
               to="/agents"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
+              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options} ${location.pathname === '/agents' ? styles.active : ''}`}
             >
               Actividad
             </Link>
-            <Link to="/agentAnalysis" className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}>
+            <Link
+              to="/agentAnalysis"
+              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options} ${location.pathname === '/agentAnalysis' ? styles.active : ''}`}
+            >
               Análisis
             </Link>
             <Link
               to="/management"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
+              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options} ${location.pathname === '/management' ? styles.active : ''}`}
             >
               Estadisticas
             </Link>
             <Link
               to="/settings"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
+              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options} ${location.pathname === '/settings' ? styles.active : ''}`}
             >
               Configuración
             </Link>
