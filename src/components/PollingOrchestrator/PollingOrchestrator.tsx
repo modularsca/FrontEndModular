@@ -51,6 +51,13 @@ const PollingOrchestrator: React.FC = () => {
       const oldCveMap =
         previousCveProbsRef.current.get(agentPolicyKey) || new Map();
 
+      // Si el mapa de CVEs previos para esta clave está vacío, es la primera vez que se carga.
+      // En este caso, solo almacenamos los datos actuales y no notificamos.
+      if (oldCveMap.size === 0) {
+        previousCveProbsRef.current.set(agentPolicyKey, newCveMap);
+        return; // No notificar en la primera carga de datos para esta clave.
+      }
+
       let cveChangesDetected = false;
       let cveChangeDetails = `Agente ${agentName} (Política ${policyId}): `;
       const addedOrChanged: string[] = [];
