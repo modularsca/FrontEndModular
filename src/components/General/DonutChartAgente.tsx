@@ -26,8 +26,9 @@ export const DonutChartAgente = ({ data, agentName }: DonutChartHeroProps) => {
       <DonutChart data={data} category="name" value="amount" />
       <button
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+        // onClick={() => navigate(`/details/${agentName}`)}
         onClick={() => navigate(`/details/${agentName}`)}
-      >
+        >
         Ver Más{" "}
       </button>
     </div>
