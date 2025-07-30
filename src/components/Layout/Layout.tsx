@@ -6,10 +6,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 // Importa el hook y el tipo de mensaje del NotificacionContext
 // Ajusta la ruta si es diferente
-import {
-  useNotification,
-  NotificationMessage,
-} from "../../context/NotificacionContext"; //
+import { useNotification, NotificationMessage } from "../../context/NotificacionContext"; //
 
 import PollingOrchestrator from "../PollingOrchestrator/PollingOrchestrator";
 
@@ -132,8 +129,7 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
             <li className="nav-item w-25">
               {" "}
               {/* Estas clases w-25 parecen mucho para cada item */}
-              <a className={`nav-link p-2 ${styles.nav_link}`}>Home</a>{" "}
-              {/* Removido w-50 innecesario aquí */}
+              <a className={`nav-link p-2 ${styles.nav_link}`}>Home</a> {/* Removido w-50 innecesario aquí */}
             </li>
             <li className="nav-item w-25">
               <a className={`nav-link p-2 ${styles.nav_link}`}>About</a>
@@ -143,10 +139,7 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
             </li>
             {/* El botón de "Notifications" que generaba las locales ha sido removido */}
             <li className="nav-item w-25">
-              <a
-                className={`nav-link p-2 ${styles.nav_link}`}
-                onClick={onLogout}
-              >
+              <a className={`nav-link p-2 ${styles.nav_link}`} onClick={onLogout}>
                 Logout
               </a>
             </li>
@@ -166,28 +159,16 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
             >
               Dashboard
             </Link>
-            <Link
-              to="/agents"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
-            >
+            <Link to="/agents" className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}>
               Actividad
             </Link>
-            <Link
-              to="/management"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
-            >
+            <Link to="/estadisticas" className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}>
               Estadisticas
             </Link>
-            <Link
-              to="/tools"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
-            >
+            <Link to="/tools" className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}>
               Analisis
             </Link>
-            <Link
-              to="/settings"
-              className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}
-            >
+            <Link to="/settings" className={`w-auto nav-link text-white px-3 py-2 ${styles.side_options}`}>
               Configuración
             </Link>
           </div>
@@ -203,10 +184,7 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
         </div>
       </div>
 
-      <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        defer
-      ></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
     </div>
   );
 };
