@@ -127,17 +127,6 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
         </a>
         <div className="navbar-collapse justify-content-end p-2">
           <ul className="navbar-nav">
-            <li className="nav-item w-25">
-              {" "}
-              {/* Estas clases w-25 parecen mucho para cada item */}
-              <a className={`nav-link p-2 ${styles.nav_link}`}>Home</a> {/* Removido w-50 innecesario aquí */}
-            </li>
-            <li className="nav-item w-25">
-              <a className={`nav-link p-2 ${styles.nav_link}`}>About</a>
-            </li>
-            <li className="nav-item w-25">
-              <a className={`nav-link p-2 ${styles.nav_link}`}>Services</a>
-            </li>
             {/* El botón de "Notifications" que generaba las locales ha sido removido */}
             <li className="nav-item w-25">
               <a className={`nav-link p-2 ${styles.nav_link}`} onClick={onLogout}>

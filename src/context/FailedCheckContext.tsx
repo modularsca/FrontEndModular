@@ -61,6 +61,18 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
         let oldFailedChecksSet = new Set<number>();
         if (existingAgentCheckData) {
           oldFailedChecksSet = existingAgentCheckData.failedChecks;
+        } else {
+          // Si no hay datos existentes, es la primera vez que se carga.
+          // Almacenamos los datos y no hacemos nada más.
+          const initialAgentCheckData: AgentCheckData = {
+            agentId,
+            agentName,
+            policyId,
+            failedChecks: newFailedChecksSet,
+            lastUpdate: now,
+          };
+          newMap.set(mapKey, initialAgentCheckData);
+          return newMap;
         }
         // ---> AQUÍ PUEDES VER LA COMPARACIÓN <---
         console.log(
