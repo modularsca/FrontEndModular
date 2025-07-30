@@ -23,8 +23,7 @@ interface FailedChecksContextType {
     agentName: string,
     policyId: string,
     newFailedChecks: number[],
-    onDiscrepancyFound?: () => void, // <--- AÑADIR ESTO
-    isInitialRun?: boolean
+    onDiscrepancyFound?: () => void // <--- AÑADIR ESTO
   ) => void;
   getAgentChecks: (
     agentId: string,
@@ -50,8 +49,7 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
       agentName: string,
       policyId: string,
       newFailedChecksArray: number[],
-      onDiscrepancyFound?: () => void, // <--- AÑADIR ESTO
-      isInitialRun: boolean = false
+      onDiscrepancyFound?: () => void // <--- AÑADIR ESTO
     ) => {
       const newFailedChecksSet = new Set(newFailedChecksArray);
       const now = new Date();
@@ -93,7 +91,7 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
           }
         });
 
-        if (newlyFailedChecks.length > 0 || newlyPassedChecks.length > 0) {
+        if (existingAgentCheckData && (newlyFailedChecks.length > 0 || newlyPassedChecks.length > 0)) {
           // CONSOLE.LOG PARA VER LA DISCREPANCIA CALCULADA
           console.log(`[DISCREPANCIA ENCONTRADA] Para Agente: ${agentName}`);
           console.log(
@@ -114,17 +112,14 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
           if (newlyPassedChecks.length > 0) {
             details += `Resueltos: [${newlyPassedChecks.join(", ")}].`;
           }
-          const notificationFunction = isInitialRun
-            ? () => {}
-            : addNotification;
-          notificationFunction(title, "warning", details);
+          addNotification(title, "warning", details);
 
           if (onDiscrepancyFound) {
             onDiscrepancyFound();
           }
         }
 
-        if (newlyFailedChecks.length > 0 || newlyPassedChecks.length > 0) {
+        if (existingAgentCheckData && (newlyFailedChecks.length > 0 || newlyPassedChecks.length > 0)) {
           let title = `Agente ${agentName}: Estado de Checks Modificado`;
           let details = `Política: ${policyId} - `;
           if (newlyFailedChecks.length > 0) {
@@ -133,10 +128,7 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
           if (newlyPassedChecks.length > 0) {
             details += `Resueltos: [${newlyPassedChecks.join(", ")}].`;
           }
-          const notificationFunction = isInitialRun
-            ? () => {}
-            : addNotification;
-          notificationFunction(title, "warning", details);
+          addNotification(title, "warning", details);
 
           if (onDiscrepancyFound) {
             // <--- LLAMAR AL CALLBACK

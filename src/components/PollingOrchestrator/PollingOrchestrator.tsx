@@ -12,7 +12,7 @@ const PollingOrchestrator: React.FC = () => {
   const queryClient = useQueryClient();
   const { updateAgentFailedChecks } = useFailedChecks();
   // ESTAS DOS VARIABLES AHORA SÍ SE UTILIZARÁN
-  const { addNotification, initializeNotifications } = useNotification();
+  const { addNotification } = useNotification();
   const previousCveProbsRef = useRef<Map<string, Map<string, any>>>(new Map());
 
   const [allAgents, setAllAgents] = useState<any[]>([]);
@@ -37,8 +37,7 @@ const PollingOrchestrator: React.FC = () => {
       agentId: string,
       agentName: string,
       policyId: string,
-      newCveProbs: { cveId: string; probability: number }[] | undefined,
-      isInitialRun: boolean = false
+      newCveProbs: { cveId: string; probability: number }[] | undefined
     ) => {
       if (!newCveProbs) return;
 
@@ -79,10 +78,7 @@ const PollingOrchestrator: React.FC = () => {
         if (removed.length > 0)
           cveChangeDetails += `CVEs Removidos: ${removed.join("; ")}. `;
         // Uso de addNotification
-        const notificationFunction = isInitialRun
-          ? initializeNotifications
-          : addNotification;
-        notificationFunction(
+        addNotification(
           "Cambios en Probabilidades de CVEs",
           "info",
           cveChangeDetails
@@ -164,8 +160,7 @@ const PollingOrchestrator: React.FC = () => {
                 currentProcessingPolicyId,
               ],
             });
-          },
-          isInitialMount.current
+          }
         );
       }
       setCurrentAgentIndex((prevIndex) => prevIndex + 1);
@@ -184,8 +179,7 @@ const PollingOrchestrator: React.FC = () => {
         currentProcessingAgentId,
         currentProcessingAgentName!,
         currentProcessingPolicyId!,
-        getCveProbsQuery.data,
-        isInitialMount.current
+        getCveProbsQuery.data
       );
     } else if (getCveProbsQuery.isError && currentProcessingAgentName) {
       console.error(
@@ -193,10 +187,7 @@ const PollingOrchestrator: React.FC = () => {
         getCveProbsQuery.error
       );
       // TAMBIÉN SE USA AQUÍ PARA NOTIFICAR ERRORES
-      const notificationFunction = isInitialMount.current
-        ? initializeNotifications
-        : addNotification;
-      notificationFunction(
+      addNotification(
         "Error en CVEs",
         "error",
         `No se pudieron obtener datos de CVE para ${currentProcessingAgentName}.`
