@@ -121,9 +121,17 @@ const PollingOrchestrator: React.FC = () => {
     }
   }, [allAgents]);
 
+  const isInitialMount = useRef(true);
+
   // 3. CONFIGURAR EL INTERVALO
   useEffect(() => {
-    const intervalId = setInterval(startCheckPollingCycle, POLLING_INTERVAL_MS);
+    const intervalId = setInterval(() => {
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      } else {
+        startCheckPollingCycle();
+      }
+    }, POLLING_INTERVAL_MS);
     return () => clearInterval(intervalId);
   }, [startCheckPollingCycle]);
 
