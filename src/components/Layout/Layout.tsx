@@ -42,12 +42,14 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
       {/* Contenedor de notificaciones - posición inferior derecha */}
       {/* Ahora mapea sobre las 'notifications' del NotificacionContext */}
       <div className="position-fixed bottom-20 end-10" style={{ zIndex: 1100 }}>
-        {notifications.map(
-          (
-            notification // 'notification' ahora es de tipo NotificationMessage
-          ) => (
-            <div
-              key={notification.id}
+        {notifications
+          .filter((notification) => !notification.silent)
+          .map(
+            (
+              notification // 'notification' ahora es de tipo NotificationMessage
+            ) => (
+              <div
+                key={notification.id}
               style={{
                 width: "400px",
                 minHeight: "100px", // Ajustado minHeight, puede ser más dinámico

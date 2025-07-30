@@ -11,10 +11,16 @@ export interface NotificationMessage {
   message: string;
   type: "info" | "success" | "warning" | "error";
   details?: string;
+  silent?: boolean;
 }
 interface NotificationContextType {
   notifications: NotificationMessage[];
   addNotification: (
+    message: string,
+    type: NotificationMessage["type"],
+    details?: string
+  ) => void;
+  initializeNotifications: (
     message: string,
     type: NotificationMessage["type"],
     details?: string
@@ -41,9 +47,23 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   const removeNotification = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
+
+  const initializeNotifications = useCallback(
+    (message: string, type: NotificationMessage["type"], details?: string) => {
+      const id = Math.random().toString(36).substr(2, 9);
+      setNotifications((prev) => [...prev, { id, message, type, details, silent: true }]);
+    },
+    []
+  );
+
   return (
     <NotificationContext.Provider
-      value={{ notifications, addNotification, removeNotification }}
+      value={{
+        notifications,
+        addNotification,
+        initializeNotifications,
+        removeNotification,
+      }}
     >
       {children}
     </NotificationContext.Provider>

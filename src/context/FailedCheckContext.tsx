@@ -23,7 +23,8 @@ interface FailedChecksContextType {
     agentName: string,
     policyId: string,
     newFailedChecks: number[],
-    onDiscrepancyFound?: () => void // <--- AÑADIR ESTO
+    onDiscrepancyFound?: () => void, // <--- AÑADIR ESTO
+    isInitialRun?: boolean
   ) => void;
   getAgentChecks: (
     agentId: string,
@@ -49,7 +50,8 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
       agentName: string,
       policyId: string,
       newFailedChecksArray: number[],
-      onDiscrepancyFound?: () => void // <--- AÑADIR ESTO
+      onDiscrepancyFound?: () => void, // <--- AÑADIR ESTO
+      isInitialRun: boolean = false
     ) => {
       const newFailedChecksSet = new Set(newFailedChecksArray);
       const now = new Date();
@@ -112,7 +114,10 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
           if (newlyPassedChecks.length > 0) {
             details += `Resueltos: [${newlyPassedChecks.join(", ")}].`;
           }
-          addNotification(title, "warning", details);
+          const notificationFunction = isInitialRun
+            ? () => {}
+            : addNotification;
+          notificationFunction(title, "warning", details);
 
           if (onDiscrepancyFound) {
             onDiscrepancyFound();
@@ -128,7 +133,10 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
           if (newlyPassedChecks.length > 0) {
             details += `Resueltos: [${newlyPassedChecks.join(", ")}].`;
           }
-          addNotification(title, "warning", details);
+          const notificationFunction = isInitialRun
+            ? () => {}
+            : addNotification;
+          notificationFunction(title, "warning", details);
 
           if (onDiscrepancyFound) {
             // <--- LLAMAR AL CALLBACK
