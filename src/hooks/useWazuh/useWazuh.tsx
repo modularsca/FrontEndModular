@@ -120,12 +120,7 @@ export const GET_POLICY_CHECKS_TEST = gql`
 
 const GET_FAILED_CHECKS_QUERY = gql`
   query GetFailedTestChecks($agentId: String!, $policyId: String!) {
-    failedCheckDetailsTest(agentId: $agentId, policyId: $policyId) {
-      id
-      title
-      description
-      remediation
-    }
+    failedCheckIdsTest(agentId: $agentId, policyId: $policyId)
   }
 `;
 
