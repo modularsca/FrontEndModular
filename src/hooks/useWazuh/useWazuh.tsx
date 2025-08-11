@@ -105,9 +105,27 @@ const GET_AGENTES_WAZUH = gql`
   }
 `;
 
+export const GET_POLICY_CHECKS_TEST = gql`
+  query GetPolicyChecksTest($agentId: String!) {
+    policyChecksTest(agentId: $agentId) {
+      id
+      result
+      title
+      policyId
+      description
+      remediation
+    }
+  }
+`;
+
 const GET_FAILED_CHECKS_QUERY = gql`
   query GetFailedTestChecks($agentId: String!, $policyId: String!) {
-    failedCheckIdsTest(agentId: $agentId, policyId: $policyId)
+    failedCheckDetailsTest(agentId: $agentId, policyId: $policyId) {
+      id
+      title
+      description
+      remediation
+    }
   }
 `;
 
@@ -188,11 +206,24 @@ export const useWazuh = (agentIdParam?: string, policyIdParam?: string) => {
     enabled: !!agentIdParam,
   });
 
+  const getPolicyChecksTest = (agentId: string) =>
+    useQuery({
+      queryKey: ["policyChecksTest", agentId],
+      queryFn: async () => {
+        const res = await graphqlClient.request<{ policyChecksTest: any }>(GET_POLICY_CHECKS_TEST, {
+          agentId,
+        });
+        return res.policyChecksTest;
+      },
+      enabled: !!agentId, // solo corre si hay agentId
+    });
+
   return {
     getAgentesQuery,
     getChecksFalladosQuery,
     getCveProbsQuery,
     getHistoricalFailedChecksSummaryByAgentQuery,
     getHistoricalFailedChecksSummaryGeneralQuery,
+    getPolicyChecksTest,
   };
 };

@@ -5,14 +5,7 @@ const AgentesDonuts = () => {
 
   if (getAgentesQuery.isLoading) return <p>Loading...</p>;
   if (getAgentesQuery.error)
-    return (
-      <p>
-        Error:{" "}
-        {getAgentesQuery.error instanceof Error
-          ? getAgentesQuery.error.message
-          : "Unknown error"}
-      </p>
-    );
+    return <p>Error: {getAgentesQuery.error instanceof Error ? getAgentesQuery.error.message : "Unknown error"}</p>;
 
   return (
     <div>
@@ -24,11 +17,7 @@ const AgentesDonuts = () => {
             { name: "Politicas N/A", amount: agente.naPolicies },
           ];
           return (
-            <DonutChartAgente
-              key={agente.id}
-              data={donutChartDataSolo}
-              agentName={agente.name}
-            />
+            <DonutChartAgente key={agente.id} data={donutChartDataSolo} agentId={agente.id} agentName={agente.name} />
           );
         })}
       </div>
