@@ -1,7 +1,6 @@
 // import React from 'react';
 import { Card, Title } from "@tremor/react";
 import AgentesDonuts from "../Views/AgentesDonuts/AgentesDonuts";
-import { useState } from "react";
 
 const Dashboard = () => {
   return (

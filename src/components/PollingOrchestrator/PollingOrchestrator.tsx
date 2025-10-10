@@ -17,18 +17,14 @@ const PollingOrchestrator: React.FC = () => {
 
   const [allAgents, setAllAgents] = useState<any[]>([]);
   const [currentAgentIndex, setCurrentAgentIndex] = useState<number>(0);
-  const [currentProcessingAgentId, setCurrentProcessingAgentId] = useState<
-    string | undefined
-  >(undefined);
-  const [currentProcessingPolicyId, setCurrentProcessingPolicyId] = useState<
-    string | undefined
-  >(undefined);
-  const [currentProcessingAgentName, setCurrentProcessingAgentName] = useState<
-    string | undefined
-  >(undefined);
+  const [currentProcessingAgentId, setCurrentProcessingAgentId] = useState<string | undefined>(undefined);
+  const [currentProcessingPolicyId, setCurrentProcessingPolicyId] = useState<string | undefined>(undefined);
+  const [currentProcessingAgentName, setCurrentProcessingAgentName] = useState<string | undefined>(undefined);
 
-  const { getAgentesQuery, getChecksFalladosQuery, getCveProbsQuery } =
-    useWazuh(currentProcessingAgentId, currentProcessingPolicyId);
+  const { getAgentesQuery, getChecksFalladosQuery, getCveProbsQuery } = useWazuh(
+    currentProcessingAgentId,
+    currentProcessingPolicyId
+  );
 
   // --- FUNCIÓN PARA PROCESAR Y NOTIFICAR CAMBIOS DE CVEs ---
   // Esta función es la que usa `addNotification` y `previousCveProbsRef`.
@@ -41,15 +37,11 @@ const PollingOrchestrator: React.FC = () => {
     ) => {
       if (!newCveProbs) return;
 
-      const newCveMap = new Map<
-        string,
-        { cveId: string; probability: number }
-      >();
+      const newCveMap = new Map<string, { cveId: string; probability: number }>();
       newCveProbs.forEach((cve) => newCveMap.set(cve.cveId, cve));
 
       const agentPolicyKey = `${agentId}-${policyId}`;
-      const oldCveMap =
-        previousCveProbsRef.current.get(agentPolicyKey) || new Map();
+      const oldCveMap = previousCveProbsRef.current.get(agentPolicyKey) || new Map();
 
       // Si el mapa de CVEs previos para esta clave está vacío, es la primera vez que se carga.
       // En este caso, solo almacenamos los datos actuales y no notificamos.
@@ -78,18 +70,10 @@ const PollingOrchestrator: React.FC = () => {
       });
 
       if (cveChangesDetected) {
-        if (addedOrChanged.length > 0)
-          cveChangeDetails += `CVEs Nuevos/Modificados: ${addedOrChanged.join(
-            "; "
-          )}. `;
-        if (removed.length > 0)
-          cveChangeDetails += `CVEs Removidos: ${removed.join("; ")}. `;
+        if (addedOrChanged.length > 0) cveChangeDetails += `CVEs Nuevos/Modificados: ${addedOrChanged.join("; ")}. `;
+        if (removed.length > 0) cveChangeDetails += `CVEs Removidos: ${removed.join("; ")}. `;
         // Uso de addNotification
-        addNotification(
-          "Cambios en Probabilidades de CVEs",
-          "info",
-          cveChangeDetails
-        );
+        addNotification("Cambios en Probabilidades de CVEs", "info", cveChangeDetails);
       }
       // Uso de previousCveProbsRef
       previousCveProbsRef.current.set(agentPolicyKey, newCveMap);
@@ -105,23 +89,13 @@ const PollingOrchestrator: React.FC = () => {
       setAllAgents(getAgentesQuery.data);
       setCurrentAgentIndex(0);
     } else if (getAgentesQuery.isError) {
-      console.error(
-        "Error al obtener la lista de agentes inicial:",
-        getAgentesQuery.error
-      );
+      console.error("Error al obtener la lista de agentes inicial:", getAgentesQuery.error);
     }
-  }, [
-    getAgentesQuery.data,
-    getAgentesQuery.isSuccess,
-    getAgentesQuery.isError,
-  ]);
+  }, [getAgentesQuery.data, getAgentesQuery.isSuccess, getAgentesQuery.isError]);
 
   // 2. FUNCIÓN QUE INICIA EL CICLO DE POLLING DE CHECKS
   const startCheckPollingCycle = useCallback(() => {
     if (allAgents.length > 0) {
-      console.log(
-        `💠💠💠💠💠💠💠💠 Iniciando ciclo de polling para los agentes 💠💠💠💠💠💠💠💠`
-      );
       setCurrentAgentIndex(0);
       // INVALIDAR LAS CONSULTAS DE CHECKS FALLADOS PARA OBTENER NUEVAS
       queryClient.invalidateQueries({ queryKey: ["checksFallados"] });
@@ -138,7 +112,7 @@ const PollingOrchestrator: React.FC = () => {
   useEffect(() => {
     if (allAgents.length > 0 && currentAgentIndex < allAgents.length) {
       const agent = allAgents[currentAgentIndex];
-      const policyIdToUse = agent.policyName;
+      const policyIdToUse = agent.policyId;
 
       if (agent && policyIdToUse) {
         setCurrentProcessingAgentId(agent.id);
@@ -161,11 +135,7 @@ const PollingOrchestrator: React.FC = () => {
           getChecksFalladosQuery.data,
           () => {
             queryClient.invalidateQueries({
-              queryKey: [
-                "cveProbs",
-                currentProcessingAgentId,
-                currentProcessingPolicyId,
-              ],
+              queryKey: ["cveProbs", currentProcessingAgentId, currentProcessingPolicyId],
             });
           }
         );
@@ -176,11 +146,7 @@ const PollingOrchestrator: React.FC = () => {
 
   // 6. EFECTO QUE REACCIONA A LOS DATOS DE CVEs (AHORA COMPLETO)
   useEffect(() => {
-    if (
-      getCveProbsQuery.isSuccess &&
-      getCveProbsQuery.data &&
-      currentProcessingAgentId
-    ) {
+    if (getCveProbsQuery.isSuccess && getCveProbsQuery.data && currentProcessingAgentId) {
       // LLAMA A LA FUNCIÓN QUE USA LAS VARIABLES
       processAndNotifyCveProbabilities(
         currentProcessingAgentId,

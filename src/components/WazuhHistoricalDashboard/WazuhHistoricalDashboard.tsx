@@ -80,7 +80,6 @@ const WazuhHistoricalDashboard = () => {
   // 1. OBTENER LA LISTA DE AGENTES UNA VEZ AL INICIO
   useEffect(() => {
     if (getAgentesQuery.isSuccess && getAgentesQuery.data) {
-      console.log("📋 Agentes obtenidos:", getAgentesQuery.data.length);
       setAllAgents(getAgentesQuery.data as AgentWazuh[]);
       collectedAgentsRef.current.clear();
       setDataCollectionProgress({ current: 0, total: getAgentesQuery.data.length });
@@ -92,7 +91,6 @@ const WazuhHistoricalDashboard = () => {
   // 2. OBTENER DATOS GENERALES UNA VEZ AL INICIO
   useEffect(() => {
     if (getHistoricalFailedChecksSummaryGeneralQuery.isSuccess && getHistoricalFailedChecksSummaryGeneralQuery.data) {
-      console.log("📊 Datos generales obtenidos:", getHistoricalFailedChecksSummaryGeneralQuery.data.length);
       const sortedGeneralData = [...getHistoricalFailedChecksSummaryGeneralQuery.data].sort(
         (a, b) => parseFormattedDate(a.formattedData).getTime() - parseFormattedDate(b.formattedData).getTime()
       );
@@ -110,7 +108,6 @@ const WazuhHistoricalDashboard = () => {
   // 3. FUNCIÓN QUE INICIA EL CICLO DE RECOLECCIÓN DE DATOS HISTÓRICOS POR AGENTE
   const startDataCollection = useCallback(() => {
     if (allAgents.length > 0 && !isCollectingRef.current) {
-      console.log("🔄 Iniciando recolección de datos históricos para todos los agentes");
       setIsCollectingData(true);
       isCollectingRef.current = true;
       setCurrentAgentIndex(0);
@@ -147,7 +144,6 @@ const WazuhHistoricalDashboard = () => {
       const policyIdToUse = agent.policyName;
 
       if (agent && policyIdToUse && !collectedAgentsRef.current.has(agent.id)) {
-        console.log(`🔍 Procesando agente ${currentAgentIndex + 1}/${allAgents.length}: ${agent.name} (${agent.id})`);
         setCurrentProcessingAgentId(agent.id);
         setCurrentProcessingPolicyId(policyIdToUse);
         setCurrentProcessingAgentName(agent.name);
@@ -156,8 +152,6 @@ const WazuhHistoricalDashboard = () => {
         setCurrentAgentIndex((prevIndex) => prevIndex + 1);
       }
     } else if (currentAgentIndex >= allAgents.length && isCollectingRef.current) {
-      // Terminar la recolección
-      console.log("✅ Recolección de datos históricos completada");
       setIsCollectingData(false);
       isCollectingRef.current = false;
       setCurrentProcessingAgentId(undefined);
@@ -174,11 +168,6 @@ const WazuhHistoricalDashboard = () => {
       !collectedAgentsRef.current.has(currentProcessingAgentId)
     ) {
       if (getHistoricalFailedChecksSummaryByAgentQuery.isSuccess && getHistoricalFailedChecksSummaryByAgentQuery.data) {
-        console.log(
-          `📈 Datos históricos obtenidos para agente ${currentProcessingAgentName}:`,
-          getHistoricalFailedChecksSummaryByAgentQuery.data.length
-        );
-
         // Ordenar datos por fecha
         const sortedHistoricalData = [...getHistoricalFailedChecksSummaryByAgentQuery.data].sort(
           (a, b) => parseFormattedDate(a.formattedData).getTime() - parseFormattedDate(b.formattedData).getTime()
@@ -359,11 +348,6 @@ const WazuhHistoricalDashboard = () => {
                           {agent.failedPolicies || 0} fallos
                         </span>
                       </div>
-                      {hasData && (
-                        <span className="text-xs text-green-600 font-medium">
-                          {agentHistoricalData[agent.id].length} puntos
-                        </span>
-                      )}
                       {!hasData && !isProcessing && <span className="text-xs text-gray-400">Sin datos</span>}
                     </div>
                   </div>

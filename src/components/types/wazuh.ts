@@ -11,10 +11,6 @@ export interface AgenteWazuh {
   policyName: string | null;
 }
 
-export interface AgentesWazuhResponse {
-  agentesWazuhTest: AgenteWazuh[];
-}
-
 export interface FailedChecksResponse {
   failedCheckIdsTest: number[];
 }

@@ -25,9 +25,9 @@ export default function Details() {
   }
 
   const { id: agentId } = useParams();
-  const { getPolicyChecksTest, getAgentesQuery } = useWazuh();
+  const { getPolicyChecks, getAgentesQuery } = useWazuh();
 
-  const { data: checksRaw, isLoading, error } = getPolicyChecksTest(agentId || "");
+  const { data: checksRaw, isLoading, error } = getPolicyChecks(agentId || "", "laboratorio_computo_windows");
   const checks: Check[] = checksRaw || [];
   const agentes = getAgentesQuery.data;
 
@@ -176,12 +176,12 @@ export default function Details() {
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full text-sm font-semibold text-gray-700">
             <div className="bg-green-50 rounded-lg py-2 flex flex-col items-center">
               <CheckCircleIcon className="h-6 w-6 text-green-600" />
-              <p className="text-green-700 mt-1">Passed</p>
+              <p className="text-green-700 mt-1">Pasados</p>
               <p className="text-green-900 text-lg font-bold">{passed}</p>
             </div>
             <div className="bg-red-50 rounded-lg py-2 flex flex-col items-center">
               <XCircleIcon className="h-6 w-6 text-red-600" />
-              <p className="text-red-700 mt-1">Failed</p>
+              <p className="text-red-700 mt-1">Fallidos</p>
               <p className="text-red-900 text-lg font-bold">{failed}</p>
             </div>
             <div className="bg-gray-100 rounded-lg py-2 flex flex-col items-center">

@@ -4,7 +4,7 @@ import graphqlClient from "../../graphClient";
 
 const getAgentes = async () => {
   const data = await graphqlClient.request<{
-    agentesWazuhTest: {
+    agentesWazuh: {
       id: string;
       name: string;
       ip: string;
@@ -14,20 +14,22 @@ const getAgentes = async () => {
       naPolicies: number;
       lastScan: string | null;
       policyName: string | null;
+      policyId: string | null;
     }[];
   }>(GET_AGENTES_WAZUH);
-  return data.agentesWazuhTest;
+  return data.agentesWazuh;
 };
 
 const getChecksFallados = async (paramAgenteId: string, paramPolicyId: string) => {
   try {
     const data = await graphqlClient.request<{
-      failedCheckIdsTest: number[];
+      failedChecksIds: number[];
     }>(GET_FAILED_CHECKS_QUERY, {
       agentId: paramAgenteId,
       policyId: paramPolicyId,
     });
-    return data.failedCheckIdsTest;
+    console.log(data);
+    return data.failedChecksIds;
   } catch (error) {
     console.error(`Error fetching failed checks for agent ${paramAgenteId} and policy ${paramPolicyId}:`, error);
     return undefined;
@@ -37,7 +39,7 @@ const getChecksFallados = async (paramAgenteId: string, paramPolicyId: string) =
 const getCveProbabilities = async (paramAgentId: string, paramPolicyId: string) => {
   try {
     const data = await graphqlClient.request<{
-      cveProbabilitiesForPolicyTest: {
+      cveProbabilitiesForPolicy: {
         cveId: string;
         probability: number;
       }[];
@@ -45,7 +47,7 @@ const getCveProbabilities = async (paramAgentId: string, paramPolicyId: string) 
       agentId: paramAgentId,
       policyId: paramPolicyId,
     });
-    return data.cveProbabilitiesForPolicyTest;
+    return data.cveProbabilitiesForPolicy;
   } catch (error) {
     console.error(`Error fetching CVE probabilities for agent ${paramAgentId} and policy ${paramPolicyId}:`, error);
     return undefined;
@@ -90,8 +92,8 @@ const getHistoricalFailedChecksSummaryByAgent = async (paramAgentId: string) => 
 // :::::::::::::::::::::::::::::::: DEFINICIONES GRAPHQL - Queries ::::::::::::::::::::::::::::::::
 
 const GET_AGENTES_WAZUH = gql`
-  query GetAgentesWazuhTest {
-    agentesWazuhTest {
+  query GetAgentesWazuh {
+    agentesWazuh {
       id
       name
       ip
@@ -100,14 +102,15 @@ const GET_AGENTES_WAZUH = gql`
       failedPolicies
       naPolicies
       lastScan
+      policyId
       policyName
     }
   }
 `;
 
 export const GET_POLICY_CHECKS_TEST = gql`
-  query GetPolicyChecksTest($agentId: String!) {
-    policyChecksTest(agentId: $agentId) {
+  query GetPolicyChecks($agentId: String!, $policyId: String!) {
+    policyChecks(agentId: $agentId, policyId: $policyId) {
       id
       result
       title
@@ -119,8 +122,8 @@ export const GET_POLICY_CHECKS_TEST = gql`
 `;
 
 const GET_FAILED_CHECKS_QUERY = gql`
-  query GetFailedTestChecks($agentId: String!, $policyId: String!) {
-    failedCheckIdsTest(agentId: $agentId, policyId: $policyId)
+  query GetFailedChecksIds($agentId: String!, $policyId: String!) {
+    failedChecksIds(agentId: $agentId, policyId: $policyId)
   }
 `;
 
@@ -146,7 +149,7 @@ const GET_HISTORICAL_FAILED_CHECKS_SUMARY_BY_AGENT = gql`
 
 const GET_CVE_PROBS_QUERY = gql`
   query GetCveProbsForPolicy($agentId: String!, $policyId: String!) {
-    cveProbabilitiesForPolicyTest(agentId: $agentId, policyId: $policyId) {
+    cveProbabilitiesForPolicy(agentId: $agentId, policyId: $policyId) {
       cveId
       probability
       description
@@ -201,15 +204,17 @@ export const useWazuh = (agentIdParam?: string, policyIdParam?: string) => {
     enabled: !!agentIdParam,
   });
 
-  const getPolicyChecksTest = (agentId: string) =>
+  const getPolicyChecks = (agentId: string, policyId: string) =>
     useQuery({
-      queryKey: ["policyChecksTest", agentId],
+      queryKey: ["policyChecks", agentId],
       queryFn: async () => {
-        const res = await graphqlClient.request<{ policyChecksTest: any }>(GET_POLICY_CHECKS_TEST, {
+        const res = await graphqlClient.request<{ policyChecks: any }>(GET_POLICY_CHECKS_TEST, {
           agentId,
+          policyId,
         });
-        return res.policyChecksTest;
+        return res.policyChecks;
       },
+      staleTime: 1000 * 60 * 60,
       enabled: !!agentId, // solo corre si hay agentId
     });
 
@@ -219,6 +224,6 @@ export const useWazuh = (agentIdParam?: string, policyIdParam?: string) => {
     getCveProbsQuery,
     getHistoricalFailedChecksSummaryByAgentQuery,
     getHistoricalFailedChecksSummaryGeneralQuery,
-    getPolicyChecksTest,
+    getPolicyChecks,
   };
 };

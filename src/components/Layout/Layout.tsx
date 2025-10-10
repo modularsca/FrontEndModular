@@ -123,7 +123,7 @@ const Layout: FC<LayoutProps> = ({ children, onLogout }) => {
 
       <nav className="w-full navbar navbar-expand-lg navbar-dark bg-dark px-4 sticky-top">
         <a className={`navbar-brand ${styles.brand}`} href="/">
-          Proyecto M
+          IntelliSentinel
         </a>
         <div className="navbar-collapse justify-content-end p-2">
           <ul className="navbar-nav">

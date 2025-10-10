@@ -1,11 +1,5 @@
 // src/context/FailedChecksContext.tsx
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useCallback,
-} from "react";
+import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { useNotification } from "./NotificacionContext";
 
 interface AgentCheckData {
@@ -25,22 +19,13 @@ interface FailedChecksContextType {
     newFailedChecks: number[],
     onDiscrepancyFound?: () => void // <--- AÑADIR ESTO
   ) => void;
-  getAgentChecks: (
-    agentId: string,
-    policyId: string
-  ) => AgentCheckData | undefined;
+  getAgentChecks: (agentId: string, policyId: string) => AgentCheckData | undefined;
 }
 
-const FailedChecksContext = createContext<FailedChecksContextType | undefined>(
-  undefined
-);
+const FailedChecksContext = createContext<FailedChecksContextType | undefined>(undefined);
 
-export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [agentChecks, setAgentChecks] = useState<Map<string, AgentCheckData>>(
-    new Map()
-  );
+export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [agentChecks, setAgentChecks] = useState<Map<string, AgentCheckData>>(new Map());
   const { addNotification } = useNotification();
 
   const updateAgentFailedChecks = useCallback(
@@ -74,21 +59,6 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
           newMap.set(mapKey, initialAgentCheckData);
           return newMap;
         }
-        // ---> AQUÍ PUEDES VER LA COMPARACIÓN <---
-        console.log(
-          `[Checks Context] Comparing for Agent: ${agentName} (Policy: ${policyId})`
-        );
-        console.log(
-          "[Checks Context]   Datos Anteriores (Contexto):",
-          Array.from(oldFailedChecksSet)
-        );
-        console.log(
-          "[Checks Context]   Nuevos Datos (Fetch):",
-          newFailedChecksArray
-        );
-
-        // CONSOLE LOG DE DISCREPANCIA
-
         const newlyFailedChecks: number[] = [];
         newFailedChecksSet.forEach((checkId) => {
           if (!oldFailedChecksSet.has(checkId)) {
@@ -104,17 +74,6 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
         });
 
         if (newlyFailedChecks.length > 0 || newlyPassedChecks.length > 0) {
-          // CONSOLE.LOG PARA VER LA DISCREPANCIA CALCULADA
-          console.log(`[DISCREPANCIA ENCONTRADA] Para Agente: ${agentName}`);
-          console.log(
-            "  -> Checks que AHORA FALLAN (nuevos):",
-            newlyFailedChecks
-          );
-          console.log(
-            "  -> Checks que YA NO FALLAN (resueltos):",
-            newlyPassedChecks
-          );
-
           // El código que ya tenías para crear y enviar la notificación
           let title = `Agente ${agentName}: Estado de Checks Modificado`;
           let details = `Política: ${policyId} - `;
@@ -171,9 +130,7 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   return (
-    <FailedChecksContext.Provider
-      value={{ agentChecks, updateAgentFailedChecks, getAgentChecks }}
-    >
+    <FailedChecksContext.Provider value={{ agentChecks, updateAgentFailedChecks, getAgentChecks }}>
       {children}
     </FailedChecksContext.Provider>
   );
@@ -182,9 +139,7 @@ export const FailedChecksProvider: React.FC<{ children: ReactNode }> = ({
 export const useFailedChecks = (): FailedChecksContextType => {
   const context = useContext(FailedChecksContext);
   if (!context) {
-    throw new Error(
-      "useFailedChecks debe ser usado dentro de un FailedChecksProvider"
-    );
+    throw new Error("useFailedChecks debe ser usado dentro de un FailedChecksProvider");
   }
   return context;
 };
