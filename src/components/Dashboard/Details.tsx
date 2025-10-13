@@ -104,7 +104,7 @@ export default function Details() {
         icon: <MinusCircleIcon className="h-5 w-5 inline mr-1" />,
       };
     }
-    if (status.toLowerCase() === "connected" || status.toLowerCase() === "online") {
+    if (status.toLowerCase() === "active" || status.toLowerCase() === "online") {
       return {
         label: "Conectado",
         bg: "bg-green-100",
