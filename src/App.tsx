@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/App.tsx
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/Login";
@@ -10,32 +11,22 @@ import Settings from "./components/Settings/Settings";
 import Estadisticas from "./components/Estadisticas/Estadisticas";
 import AgentAnalysis from "./components/AgentAnalysis/AgentAnalysis";
 import AgentDetail from "./components/AgentAnalysis/AgentDetail";
+import { useAuth } from "./context/AuthContext"; // <-- 1. IMPORTAR HOOK
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // 2. OBTENER ESTADO Y FUNCIONES DEL CONTEXTO
+  const { isAuthenticated, logout: handleLogout } = useAuth();
 
-  const handleLogin = (username: string, password: string) => {
-    const defaultUsername = "admin";
-    const defaultPassword = "123";
-
-    if (username === defaultUsername && password === defaultPassword) {
-      setIsAuthenticated(true);
-      setError(null);
-    } else {
-      setError("Credenciales inválidas. Por favor, inténtelo de nuevo.");
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-  };
+  // El 'handleLogin' y el 'error' local se eliminan.
+  // El componente Login los obtendrá del contexto también.
 
   return (
     <Router>
-      {isAuthenticated ? (
+      {isAuthenticated ? ( // 3. USAR ESTADO DEL CONTEXTO
         <div className=" h-full shadow-slate-500 w-full min-w-min">
           <Layout onLogout={handleLogout}>
+            {" "}
+            {/* 4. USAR LOGOUT DEL CONTEXTO */}
             <Routes>
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
@@ -52,7 +43,8 @@ const App: React.FC = () => {
         </div>
       ) : (
         <Routes>
-          <Route path="/" element={<Login onLogin={handleLogin} error={error} />} />
+          {/* 5. EL LOGIN YA NO NECESITA PROPS */}
+          <Route path="/" element={<Login />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}

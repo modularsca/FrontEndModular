@@ -15,8 +15,6 @@ interface DonutChartHeroProps {
 
 export const DonutChartAgente = ({ data, agentId, agentName }: DonutChartHeroProps) => {
   const navigate = useNavigate();
-  console.log("data en chart");
-  console.log(data);
   return (
     <div
       className="flex flex-col items-center justify-center gap-3 border-sky-500 shadow-md p-4 rounded-md border-2 m-5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"

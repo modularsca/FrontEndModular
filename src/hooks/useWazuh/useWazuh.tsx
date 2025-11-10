@@ -28,7 +28,6 @@ const getChecksFallados = async (paramAgenteId: string, paramPolicyId: string) =
       agentId: paramAgenteId,
       policyId: paramPolicyId,
     });
-    console.log(data);
     return data.failedChecksIds;
   } catch (error) {
     console.error(`Error fetching failed checks for agent ${paramAgenteId} and policy ${paramPolicyId}:`, error);

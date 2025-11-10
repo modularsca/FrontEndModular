@@ -1,8 +1,23 @@
 import { FC, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./Settings.module.css";
+import { useMutation } from "@tanstack/react-query"; // <-- AÑADIDO
+import { gql } from "graphql-request"; // <-- AÑADIDO
+import graphqlClient from "../../graphClient"; // <-- AÑADIDO
+import { useAuth } from "../../context/AuthContext"; // <-- AÑADIDO
 
-// Definición de las interfaces para los estados de los formularios
+// --- Definición de la mutación de GraphQL ---
+// APUNTAMOS A NUESTRA MUTACIÓN PERSONALIZADA: customPasswordChange
+const PASSWORD_CHANGE_MUTATION = gql`
+  mutation CustomPasswordChange($old_password: String!, $new_password1: String!, $new_password2: String!) {
+    customPasswordChange(oldPassword: $old_password, newPassword1: $new_password1, newPassword2: $new_password2) {
+      success
+      errors # Pedimos los errores como JSON
+    }
+  }
+`;
+
+// --- Interfaces de Tipos ---
 interface AgentFormState {
   agentIdentifier: string;
 }
@@ -10,37 +25,49 @@ interface AgentFormState {
 interface PasswordFormState {
   currentPassword: string;
   newPassword: string;
+  newPassword2: string; // <-- AÑADIDO: Campo de confirmación
+}
+
+// Tipo para la respuesta de la mutación
+interface PasswordChangeResponse {
+  // El nombre de la mutación debe coincidir
+  customPasswordChange: {
+    success: boolean;
+    errors: string | null; // Los errores vienen como un string JSON
+  };
+}
+// Tipo para errores de graphql-request
+interface GqlError {
+  response: {
+    errors: {
+      message: string;
+    }[];
+  };
 }
 
 const Settings: FC = () => {
-  // --- Lógica del Botón Copiar (Sin cambios significativos) ---
+  // --- Lógica de Copiar ---
   const [copyStatus, setCopyStatus] = useState("");
   const installCodeRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = (ref: React.RefObject<HTMLDivElement>, commandName: string) => {
     if (ref.current) {
       const commandText = ref.current.textContent || ref.current.innerText;
-
       navigator.clipboard
         .writeText(commandText.trim())
         .then(() => {
           setCopyStatus(`¡${commandName} copiado!`);
-          setTimeout(() => {
-            setCopyStatus("");
-          }, 3000);
+          setTimeout(() => setCopyStatus(""), 3000);
         })
         .catch((err) => {
           console.error("Error al intentar copiar: ", err);
           setCopyStatus("Error al copiar.");
-          setTimeout(() => {
-            setCopyStatus("");
-          }, 3000);
+          setTimeout(() => setCopyStatus(""), 3000);
         });
     }
   };
-  // -------------------------------------------------------------
 
-  // === ESTADOS PARA EL FORMULARIO DE ELIMINAR AGENTE ===
+  // --- Formulario de Eliminar Agente ---
   const [agentForm, setAgentForm] = useState<AgentFormState>({
     agentIdentifier: "",
   });
@@ -51,37 +78,102 @@ const Settings: FC = () => {
 
   const handleSubmitDelete = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // AQUÍ ES DONDE LLAMARÍAS A TU MUTACIÓN DE GraphQL
-    console.log("Datos listos para la mutación 'Eliminar Agente':", agentForm);
+    // Lógica de mutación para eliminar agente iría aquí
     alert(`Preparado para eliminar al agente: ${agentForm.agentIdentifier}. (Simulado)`);
-    // Después de una respuesta exitosa del servidor, podrías resetear el formulario:
-    // setAgentForm({ agentIdentifier: '' });
   };
-  // ======================================================
 
-  // === ESTADOS PARA EL FORMULARIO DE CAMBIAR CONTRASEÑA ===
+  // ======================================================
+  // === FORMULARIO DE CAMBIAR CONTRASEÑA (ACTUALIZADO) ===
+  // ======================================================
+  const { logout } = useAuth(); // Obtenemos logout del contexto
   const [passwordForm, setPasswordForm] = useState<PasswordFormState>({
     currentPassword: "",
     newPassword: "",
+    newPassword2: "", // <-- AÑADIDO
+  });
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
+
+  // --- Hook de Mutación de TanStack Query ---
+  const mutation = useMutation<PasswordChangeResponse, GqlError, PasswordFormState>({
+    mutationFn: (variables) =>
+      graphqlClient.request(PASSWORD_CHANGE_MUTATION, {
+        old_password: variables.currentPassword,
+        new_password1: variables.newPassword,
+        new_password2: variables.newPassword2,
+      }),
+    onSuccess: (data) => {
+      // El nombre de la mutación debe coincidir
+      if (data.customPasswordChange.success) {
+        setPasswordSuccess("¡Contraseña cambiada con éxito! Serás deslogueado por seguridad.");
+        setPasswordError(null);
+        setPasswordForm({ currentPassword: "", newPassword: "", newPassword2: "" }); // Resetea el formulario
+        // Desloguea al usuario después de cambiar la contraseña
+        setTimeout(() => {
+          logout();
+        }, 3000);
+      } else {
+        // Maneja errores devueltos por la mutación (ej. contraseña actual incorrecta)
+        try {
+          // Intentamos parsear los errores JSON
+          const errors = JSON.parse(data.customPasswordChange.errors || "{}");
+          let errorMessages = [];
+          if (errors?.old_password) {
+            errorMessages.push(errors.old_password[0].message);
+          }
+          if (errors?.new_password2) {
+            // Puede ser un array de mensajes o un diccionario
+            if (Array.isArray(errors.new_password2)) {
+              errors.new_password2.forEach((err: any) => errorMessages.push(err.message || err));
+            } else if (errors.new_password2[0]) {
+              errorMessages.push(errors.new_password2[0].message);
+            }
+          }
+          if (errorMessages.length > 0) {
+            setPasswordError(errorMessages.join(" "));
+          } else {
+            setPasswordError("Ocurrió un error al cambiar la contraseña.");
+          }
+        } catch (e) {
+          setPasswordError("Error al procesar la respuesta del servidor.");
+        }
+        setPasswordSuccess(null);
+      }
+    },
+    onError: (error) => {
+      // Maneja errores de red o de GraphQL (ej. 401 no autorizado)
+      const gqlError = error.response?.errors?.[0]?.message || "Error desconocido.";
+      setPasswordError(gqlError);
+      setPasswordSuccess(null);
+    },
   });
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setPasswordForm((prev) => ({
       ...prev,
-      [id]: value, // Usa el 'id' del input para actualizar la clave correcta
+      [id]: value,
     }));
   };
 
   const handleSubmitPassword = (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordError(null); // Resetea errores
+    setPasswordSuccess(null); // Resetea éxito
 
-    // AQUÍ ES DONDE LLAMARÍAS A TU MUTACIÓN DE GraphQL
-    console.log("Datos listos para la mutación 'Cambiar Contraseña':", passwordForm);
-    alert("Preparado para cambiar la contraseña. (Simulado)");
-    // Después de una respuesta exitosa del servidor, podrías resetear el formulario:
-    // setPasswordForm({ currentPassword: '', newPassword: '' });
+    // Validación local primero
+    if (passwordForm.newPassword !== passwordForm.newPassword2) {
+      setPasswordError("Las nuevas contraseñas no coinciden.");
+      return;
+    }
+    // Opcional: Validación de longitud mínima (aunque Django también la hará)
+    if (passwordForm.newPassword.length < 8) {
+      setPasswordError("La nueva contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+
+    // Llama a la mutación
+    mutation.mutate(passwordForm);
   };
   // ======================================================
 
@@ -164,10 +256,10 @@ const Settings: FC = () => {
         <hr className="my-5" />
 
         {/* ========================================================== */}
-        {/* SECCIÓN 2: FORMULARIOS DE GESTIÓN (ACTUALIZADOS CON ESTADO) */}
+        {/* SECCIÓN 2: FORMULARIOS DE GESTIÓN (ACTUALIZADOS) */}
         {/* ========================================================== */}
         <div className="row">
-          {/* Formulario ELIMINAR AGENTE */}
+          {/* Formulario ELIMINAR AGENTE (Sin cambios en la lógica) */}
           <div className="col-md-6 mb-4">
             <div className="card h-100 border-danger">
               <div className="card-header bg-danger text-white">
@@ -185,11 +277,11 @@ const Settings: FC = () => {
                     <input
                       type="text"
                       className="form-control"
-                      id="agentIdentifier" // ID coincide con la clave del estado
+                      id="agentIdentifier"
                       placeholder="e.g., 001 o web-server-dev"
                       required
-                      value={agentForm.agentIdentifier} // Valor controlado
-                      onChange={handleAgentChange} // Manejador de cambio
+                      value={agentForm.agentIdentifier}
+                      onChange={handleAgentChange}
                     />
                   </div>
                   <button type="submit" className="btn btn-danger w-100">
@@ -200,7 +292,7 @@ const Settings: FC = () => {
             </div>
           </div>
 
-          {/* Formulario CAMBIAR CONTRASEÑA */}
+          {/* Formulario CAMBIAR CONTRASEÑA (ACTUALIZADO) */}
           <div className="col-md-6 mb-4">
             <div className="card h-100 border-primary">
               <div className="card-header bg-primary text-white">
@@ -210,6 +302,19 @@ const Settings: FC = () => {
                 <p className="card-text">
                   Actualiza tu contraseña. Por seguridad, debes introducir la contraseña actual.
                 </p>
+
+                {/* --- Alertas de Éxito y Error --- */}
+                {passwordSuccess && (
+                  <div className="alert alert-success" role="alert">
+                    {passwordSuccess}
+                  </div>
+                )}
+                {passwordError && (
+                  <div className="alert alert-danger" role="alert">
+                    {passwordError}
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmitPassword}>
                   <div className="mb-3">
                     <label htmlFor="currentPassword" className="form-label">
@@ -218,10 +323,11 @@ const Settings: FC = () => {
                     <input
                       type="password"
                       className="form-control"
-                      id="currentPassword" // ID coincide con la clave del estado
+                      id="currentPassword"
                       required
-                      value={passwordForm.currentPassword} // Valor controlado
-                      onChange={handlePasswordChange} // Manejador de cambio
+                      value={passwordForm.currentPassword}
+                      onChange={handlePasswordChange}
+                      disabled={mutation.isPending} // <-- Deshabilitar
                     />
                   </div>
                   <div className="mb-3">
@@ -231,14 +337,30 @@ const Settings: FC = () => {
                     <input
                       type="password"
                       className="form-control"
-                      id="newPassword" // ID coincide con la clave del estado
+                      id="newPassword"
                       required
-                      value={passwordForm.newPassword} // Valor controlado
-                      onChange={handlePasswordChange} // Manejador de cambio
+                      value={passwordForm.newPassword}
+                      onChange={handlePasswordChange}
+                      disabled={mutation.isPending} // <-- Deshabilitar
                     />
                   </div>
-                  <button type="submit" className="btn btn-primary w-100">
-                    Cambiar Contraseña
+                  {/* --- CAMPO AÑADIDO --- */}
+                  <div className="mb-3">
+                    <label htmlFor="newPassword2" className="form-label">
+                      Confirmar Nueva Contraseña
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="newPassword2" // <-- ID para el estado
+                      required
+                      value={passwordForm.newPassword2}
+                      onChange={handlePasswordChange}
+                      disabled={mutation.isPending} // <-- Deshabilitar
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-primary w-100" disabled={mutation.isPending}>
+                    {mutation.isPending ? "Cambiando..." : "Cambiar Contraseña"}
                   </button>
                 </form>
               </div>
